@@ -1,0 +1,13 @@
+.material-icons{
+    display: inline-flex;
+    vertical-align: top;
+}
+.mat-mdc-list-item.mdc-list-item--with-three-lines .mat-mdc-list-item-unscoped-content.mdc-list-item__secondary-text {
+    display: flex;
+    -webkit-box-orient: horizontal;
+    -webkit-line-clamp: 2;
+    flex-direction: column-reverse;
+    justify-content: flex-end;
+    align-items: right;
+    /* align-content: flex-start; */
+}

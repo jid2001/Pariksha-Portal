@@ -1,0 +1,53 @@
+<mat-toolbar color="accent">
+  <a
+    routerLink="/"
+    mat-icon-button
+    class="example-icon"
+    aria-label="Example icon-button with menu icon"
+  >
+    <mat-icon>menu_book</mat-icon>
+  </a>
+  <span>Pariksha App </span>
+  <span class="example-spacer"></span>
+
+  <a routerLink="/login">
+    <span *ngIf="!login.isLoggedIn()">
+      <button mat-raised-button color="primary" style="margin-right: 20px">
+        Login
+      </button>
+    </span>
+  </a>
+
+  <a [routerLink]="'/signup'">
+    <!-- just alternate way of router link -->
+    <span *ngIf="!login.isLoggedIn()">
+      <button mat-raised-button color="primary">
+       SignUp
+      </button>
+    </span>
+  </a>
+
+
+  <!-- this is to displya dynamic rendering -->
+  <a >
+    <span *ngIf="login.isLoggedIn()">
+        <button mat-stroked-button style="margin-right: 20px">
+       {{login.getUserData().username}}
+      </button>
+    </span>
+  </a>
+
+
+  <a 
+  (click) = "logout()">
+    
+    <span *ngIf="login.isLoggedIn()">
+      <!-- <button mat-raised-button color="primary"> -->
+    <mat-icon>logout</mat-icon>
+
+       <!-- LogOut -->
+      <!-- </button> -->
+    </span>
+  </a>
+
+</mat-toolbar>

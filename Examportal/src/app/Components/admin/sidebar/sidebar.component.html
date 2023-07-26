@@ -1,0 +1,41 @@
+<mat-card>
+  <mat-action-list style="font:bolder;">
+    <div mat-subheader>Menu</div>
+
+    <button mat-list-item routerLink="/admin-dashboard">
+      <div class="d-flex">
+        <div class="p-1"> <mat-icon mat-list-icon>home</mat-icon></div>
+        <div class="p-1" >Home</div>
+        </div>
+    </button>
+
+    <button mat-list-item routerLink="/admin-dashboard/profile">
+      <div class="d-flex">
+        <div class="p-1"><mat-icon mat-list-icon>account_circle</mat-icon></div>
+        <div class="p-1">Profile</div>
+      </div>
+    </button>
+
+    <button mat-list-item routerLink="/admin-dashboard/categories" >
+        <mat-icon mat-list-icon>list</mat-icon>  Categories
+    </button>
+
+    <button mat-list-item routerLink="/admin-dashboard/addCategory">
+     <mat-icon mat-list-icon>add_circle</mat-icon>  Add Categories
+         
+    </button>
+
+    <button mat-list-item routerLink="/admin-dashboard/quizzes">
+     <mat-icon mat-list-icon>quize</mat-icon>  Quzies
+    </button>
+    <button mat-list-item routerLink="/admin-dashboard/add-quiz">
+       <mat-icon mat-list-icon>add</mat-icon>  Add Quzies
+       
+        
+     
+    </button>
+    <button mat-list-item routerLink="/admin-dashboard">
+      <mat-icon mat-list-icon>logout</mat-icon> Logout
+    </button>
+  </mat-action-list>
+</mat-card>

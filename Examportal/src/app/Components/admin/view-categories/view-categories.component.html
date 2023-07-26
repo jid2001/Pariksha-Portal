@@ -1,0 +1,58 @@
+<!-- <mat-card>
+  <mat-card-header>
+    <mat-card-title>All Categories</mat-card-title>
+    <mat-card-subtitle>Start</mat-card-subtitle> 
+  </mat-card-header>
+  
+
+    <mat-list>
+      <div>hello</div>
+      <mat-list-item *ngFor = "let cat of categories">
+        <mat-icon mat-list-icon>category</mat-icon> {{cat.title}}
+        <br>
+        <mat-icon mat-list-icon></mat-icon>{{cat.description}}
+        <mat-divider></mat-divider>
+        
+    </mat-list-item>
+    
+  </mat-list>
+<div class="container text center mt20">
+
+  <button mat-raised-button color="primary">Primary</button>
+</div>
+ 
+</mat-card>
+<br> -->
+
+
+
+<mat-card class="mt20">
+  <h1 class="text-center mt20">All Categories</h1>
+
+  <mat-card-content>
+    <mat-list>
+    
+      <mat-list-item *ngFor="let cat of categories">
+        <mat-icon matListItemIcon>category</mat-icon>
+        <div matListItemTitle>{{cat.title}}</div>
+        <div matListItemLine>{{cat.description}}</div>
+       
+    
+        <mat-divider></mat-divider>
+     
+        
+      
+    </mat-list-item>
+    
+    </mat-list>
+    <mat-card-actions>
+      <!-- Buttons -->
+    <div class="container text-center">
+      <button  mat-raised-button color="primary"
+          routerLink="/admin-dashboard/addCategory">
+        <mat-icon>add</mat-icon>Add Category
+      </button>
+      </div>
+      </mat-card-actions>
+  </mat-card-content>
+</mat-card>
