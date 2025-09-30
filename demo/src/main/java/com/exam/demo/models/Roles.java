@@ -28,7 +28,7 @@ public class Roles {
 	}
 
 	public Roles(Long roleId, String roleName) {
-		super();
+
 		this.roleId = roleId;
 		this.roleName = roleName;
 	}
