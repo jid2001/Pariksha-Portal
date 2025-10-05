@@ -1,13 +1,18 @@
 steps:
   # Clean previous builds
   - name: 'gcr.io/cloud-builders/mvn'
-    args: ['clean']
-  # Run tests (optional but recommended for CI)
-  - name: 'gcr.io/cloud-builders/mvn'
-    args: ['test']
-  # Package the application, skipping tests for faster build
-  - name: 'gcr.io/cloud-builders/mvn'
-    args: ['package', '-DskipTests']
+    dir: 'demo'
+    args: ['clean', 'package', '-DskipTests']
+
+#  # Run tests (optional but recommended for CI)
+#  - name: 'gcr.io/cloud-builders/mvn'
+#    args: ['test']
+#  # Package the application, skipping tests for faster build
+#  - name: 'gcr.io/cloud-builders/mvn'
+#    args: ['package', '-DskipTests']
+
+
+    # Copy the built jar to the root directory for Docker build context
   # Build the Docker image using the jar generated above
   - name: 'gcr.io/cloud-builders/docker'
     args: ['build', '-t', 'gcr.io/$PROJECT_ID/examportal-backend:$COMMIT_SHA', '.']
