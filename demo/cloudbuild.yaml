@@ -15,9 +15,11 @@ steps:
     # Copy the built jar to the root directory for Docker build context
   # Build the Docker image using the jar generated above
   - name: 'gcr.io/cloud-builders/docker'
+    dir: 'demo'
     args: ['build', '-t', 'gcr.io/$PROJECT_ID/examportal-backend:$COMMIT_SHA', '.']
   # Push the Docker image to Google Container Registry
   - name: 'gcr.io/cloud-builders/docker'
+    dir: 'demo'
     args: ['push', 'gcr.io/$PROJECT_ID/examportal-backend:$COMMIT_SHA']
   # Deploy the image to Cloud Run
   - name: 'gcr.io/cloud-builders/gcloud'
