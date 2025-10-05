@@ -17,10 +17,12 @@ steps:
   - name: 'gcr.io/cloud-builders/docker'
     dir: 'demo'
     args: ['build', '-t', 'gcr.io/$PROJECT_ID/examportal-backend:$COMMIT_SHA', '.']
+
   # Push the Docker image to Google Container Registry
   - name: 'gcr.io/cloud-builders/docker'
     dir: 'demo'
     args: ['push', 'gcr.io/$PROJECT_ID/examportal-backend:$COMMIT_SHA']
+
   # Deploy the image to Cloud Run
   - name: 'gcr.io/cloud-builders/gcloud'
     args:
@@ -33,8 +35,19 @@ steps:
       - 'us-central1'
       - '--platform'
       - 'managed'
+      - '--set-env-vars=SPRING_PROFILES_ACTIVE=prod'
+      - '--set-env-vars=SPRING_DATASOURCE_URL=${_SPRING_DATASOURCE_URL}'
+      - '--set-env-vars=SPRING_DATASOURCE_USERNAME=${_SPRING_DATASOURCE_USERNAME}'
+      - '--set-env-vars=SPRING_DATASOURCE_PASSWORD=${_SPRING_DATASOURCE_PASSWORD}'
+
 images:
   - 'gcr.io/$PROJECT_ID/examportal-backend:$COMMIT_SHA'
 
 options:
   logging: CLOUD_LOGGING_ONLY
+
+# Substitution variables required for this build
+substitutions:
+  _SPRING_DATASOURCE_URL: '' # Database URL (e.g., jdbc:mysql://host:port/database)
+  _SPRING_DATASOURCE_USERNAME: '' # Database username
+  _SPRING_DATASOURCE_PASSWORD: '' # Database password
