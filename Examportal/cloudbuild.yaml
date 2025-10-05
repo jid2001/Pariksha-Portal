@@ -47,4 +47,7 @@ substitutions:
   _IMAGE: 'app-examportal-frontend'
   _SERVICE_NAME: 'app-examportal-frontend'
 
+
+options:
+  logging: CLOUD_LOGGING_ONLY
 timeout: '1200s'
