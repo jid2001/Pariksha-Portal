@@ -30,7 +30,7 @@ public class UserServiceImpl implements UserService {
 		
 		if(local != null) {
 			System.out.println("User Already exists  ");
-			throw new Exception("User already present "); 
+			throw new Exception("UserName already exists ");
 		}
 		else {
 			for(UserRoles ur: userroles) {

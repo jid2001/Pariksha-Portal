@@ -37,7 +37,6 @@ public class Category {
 	}
 
 	public Category(String title, String description) {
-		super();
 		this.title = title;
 		this.description = description;
 	}
@@ -65,6 +64,13 @@ public class Category {
 	public void setDescription(String description) {
 		this.description = description;
 	}
-	
-	
+
+    public Set<Quiz> getQuizzes() {
+        return quizzes;
+    }
+
+    public void setQuizzes(Set<Quiz> quizzes) {
+        this.quizzes = quizzes;
+
+    }
 }

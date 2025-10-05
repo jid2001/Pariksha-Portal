@@ -4,6 +4,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,39 +18,40 @@ import org.springframework.web.bind.annotation.RestController;
 import com.exam.demo.models.Roles;
 import com.exam.demo.models.User;
 import com.exam.demo.models.UserRoles;
+import com.exam.demo.repo.RoleRepository;
 import com.exam.demo.services.UserService;
 
 @CrossOrigin("*")
 @RestController
 @RequestMapping("/user")
 public class UserController {
-	
-	@Autowired
-	private UserService userService;
-	
+    @Autowired
+    private UserService userService;
+    @Autowired
+    private RoleRepository roleRepository;
+
 	// Post request for user
 	@PostMapping("/")
-	public User createUser(@RequestBody User user) throws Exception {
-		
-		Roles roles = new Roles();
- 
-		roles.setRoleId(2L);
-		
-		roles.setRoleName("Normal");
-		
-		Set<UserRoles> urset = new HashSet<>();
-		UserRoles ur = new UserRoles();
-		
-		ur.setRoles(roles);
-		
-		ur.setUser(user ); 
-		
-		urset.add(ur);
-		
-		return this.userService.createUser(user,urset);
-		
-	}
-	
+	public ResponseEntity<?> createUser(@RequestBody User user) {
+        try {
+            Roles roles = roleRepository.findByRoleName("Normal");
+            if (roles == null) {
+                roles = new Roles();
+                roles.setRoleName("Normal");
+                roles = roleRepository.save(roles);
+            }
+            Set<UserRoles> urset = new HashSet<>();
+            UserRoles ur = new UserRoles();
+            ur.setRoles(roles);
+            ur.setUser(user);
+            urset.add(ur);
+            User createdUser = this.userService.createUser(user, urset);
+            return ResponseEntity.ok(createdUser);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
 	
 	// Get user by usename 
 	
