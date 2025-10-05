@@ -18,12 +18,13 @@
               <div>Marks {{ quiz.maxMarks }}</div>
             </div>
           </mat-card-content>
+          {{  quiz.id | json}}
           <mat-card-actions>
             <button
               class="btn"
               mat-raised-button
               color="primary"
-              [routerLink]="'/user/instructions/' + quiz.qid"
+              [routerLink]="'/user-dashboard/instructions/' + quiz.id"
             >
               view
             </button>

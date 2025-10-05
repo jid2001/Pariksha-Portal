@@ -20,6 +20,7 @@ export class InstuctionsOfQuizComponent implements OnInit{
   ngOnInit(): void {
     this.qid = this.route.snapshot.params['qid'];
     this.quizService.getQuiz(this.qid).subscribe((data) => {
+      console.log(data);
       this.quiz = data;
     });
   }
@@ -28,7 +29,7 @@ export class InstuctionsOfQuizComponent implements OnInit{
       title: 'Do you want to start the Quiz?',
       showDenyButton: true,
       confirmButtonText: 'Start',
-      denyButtonText: `Don't start`,
+      denyButtonText: `Cancel`,
       icon: 'info',
     }).then((result) => {
       /* Read more about isConfirmed, isDenied below */

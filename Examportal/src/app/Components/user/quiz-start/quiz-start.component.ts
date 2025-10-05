@@ -1,5 +1,5 @@
 import { LocationStrategy } from '@angular/common';
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { QuestionService } from 'src/app/Services/question.service';
 import Swal from 'sweetalert2';
@@ -10,18 +10,24 @@ import Swal from 'sweetalert2';
   styleUrls: ['./quiz-start.component.css'],
 })
 export class QuizStartComponent implements OnInit {
-  qid: any;
-  questions: any;
-  marksGot = 0;
-  correctAnswer = 0;
-  attempted = 0;
-  maximumMarks = 0;
-  isSubmit = false;
-  timer: any;
-  counter: any;
-  interval: any;
-  value: any;
-  test: number = 0;
+  // route / quiz identifiers
+  quizId!: number;
+
+  // questions retrieved from server for this quiz
+  quizQuestions: any[] = [];
+
+  // results
+  score = 0;
+  correctCount = 0;
+  attemptedCount = 0;
+  maxMarks = 0;
+  submitted = false;
+
+  // timer related
+  totalDurationSeconds = 0; // full quiz duration (secs)
+  remainingSeconds = 0; // remaining seconds
+  private tickIntervalRef: any = null;
+
   constructor(
     private locationStrategy: LocationStrategy,
     private route: ActivatedRoute,
@@ -30,100 +36,119 @@ export class QuizStartComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.qid = this.route.snapshot.params['qid'];
-    this.preventBackButton();
-    this.loadQuestions();
+    this.quizId = Number(this.route.snapshot.params['qid']);
+    this.preventBackNavigation();
+    this.loadQuizQuestions();
   }
 
-  loadQuestions() {
-    this.questionService.getQuestionsOfQuizForUser(this.qid).subscribe(
-      (data) => {
-        this.questions = data;
-        console.log(this.questions);
-
-        this.questions.forEach((ques: any) => {
-          ques['givenAnswer'] = '';
-        });
+  private loadQuizQuestions(): void {
+    this.questionService.getQuestionsOfQuizForUser(this.quizId).subscribe(
+      (questions: any) => {
+        this.quizQuestions = questions || [];
+        // ensure givenAnswer exists for each question
+        this.quizQuestions.forEach((q) => (q.givenAnswer = q.givenAnswer ?? ''));
+        // determine max marks from quiz meta if available
+        if (this.quizQuestions.length > 0 && this.quizQuestions[0].quiz?.maxMarks) {
+          this.maxMarks = Number(this.quizQuestions[0].quiz.maxMarks) || 0;
+        }
+        // start timer after loading questions
         this.startTimer();
       },
-      (error) => {}
+      (error) => {
+        console.error('Failed to load quiz questions', error);
+      }
     );
   }
-  preventBackButton() {
+
+  private preventBackNavigation(): void {
     history.pushState(null, '', location.href);
     this.locationStrategy.onPopState(() => {
       history.pushState(null, '', location.href);
     });
   }
 
-  submitQuiz() {
+  confirmSubmit(): void {
     Swal.fire({
       title: 'Do you want to submit the Quiz?',
       showCancelButton: true,
       confirmButtonText: 'Submit',
-
       icon: 'info',
     }).then((result) => {
-      /* Read more about isConfirmed, isDenied below */
       if (result.isConfirmed) {
         this.evaluateQuiz();
-      } else if (result.isDenied) {
-        Swal.fire('Changes are not saved', '', 'info');
       }
     });
   }
-  evaluateQuiz() {
-    this.isSubmit = true;
-    this.value = this.timer;
-    this.questions.forEach((ques: any) => {
-      if (ques.givenAnswer == ques.answer) {
-        this.correctAnswer++;
-        this.maximumMarks = this.questions[0].quiz.maxMarks;
-        let eachQuestionMark = this.maximumMarks / this.questions.length;
-        this.marksGot += eachQuestionMark;
+
+  private evaluateQuiz(): void {
+    this.submitted = true;
+    // stop timer
+    this.clearTimer();
+
+    this.score = 0;
+    this.correctCount = 0;
+    this.attemptedCount = 0;
+
+    const totalQuestions = this.quizQuestions.length || 1;
+    const perQuestionMark = this.maxMarks > 0 ? this.maxMarks / totalQuestions : 0;
+
+    for (const q of this.quizQuestions) {
+      const given = (q.givenAnswer || '').toString().trim();
+      if (given !== '') this.attemptedCount++;
+      if (given === q.answer) {
+        this.correctCount++;
+        this.score += perQuestionMark;
       }
-      if (ques.givenAnswer.trim() != '') {
-        this.attempted++;
-      }
-    });
-  }
-  startTimer() {
-    this.timer = 303;
-    const exist = localStorage.getItem('counter');
-    if (exist) {
-      if (parseInt(exist) <= 0) {
-        this.value = this.timer;
-      } else {
-        this.value = localStorage.getItem('counter');
-      }
-    } else {
-      this.value = this.timer;
     }
 
-    this.counter = function () {
-      if (this.value <= 0) {
-        localStorage.setItem('counter', this.timer);
-        clearInterval(this.interval);
+    // round score to 2 decimals
+    this.score = Math.round(this.score * 100) / 100;
+  }
 
+  private startTimer(): void {
+    // default to 5 minutes if quiz meta not provided (300s)
+    this.totalDurationSeconds = 300 + 3; // original had 303
+
+    // use a quiz-scoped storage key so multiple quizzes don't conflict
+    const storageKey = `quiz_timer_${this.quizId}`;
+    const saved = localStorage.getItem(storageKey);
+    if (saved != null && !isNaN(Number(saved)) && Number(saved) > 0) {
+      this.remainingSeconds = Number(saved);
+    } else {
+      this.remainingSeconds = this.totalDurationSeconds;
+    }
+
+    // tick function uses arrow so `this` is lexical
+    const tick = () => {
+      if (this.remainingSeconds <= 0) {
+        localStorage.setItem(storageKey, String(this.totalDurationSeconds));
+        this.clearTimer();
         this.evaluateQuiz();
       } else {
-        this.value = parseInt(this.value) - 1;
-        localStorage.setItem('counter', this.value);
+        this.remainingSeconds = this.remainingSeconds - 1;
+        localStorage.setItem(storageKey, String(this.remainingSeconds));
       }
     };
 
-    this.interval = setInterval(() => {
-      this.counter();
-    }, 1000);
+    // clear any existing interval first
+    this.clearTimer();
+    this.tickIntervalRef = setInterval(tick, 1000);
   }
 
-  getFormattedTime() {
-    let mm = Math.floor(this.value / 60);
-    let ss = this.value - mm * 60;
+  private clearTimer(): void {
+    if (this.tickIntervalRef) {
+      clearInterval(this.tickIntervalRef);
+      this.tickIntervalRef = null;
+    }
+  }
 
+  getFormattedTime(): string {
+    const mm = Math.floor(this.remainingSeconds / 60);
+    const ss = this.remainingSeconds % 60;
     return `${mm} min : ${ss} sec`;
   }
-  print() {
+
+  printResult(): void {
     window.print();
   }
 }

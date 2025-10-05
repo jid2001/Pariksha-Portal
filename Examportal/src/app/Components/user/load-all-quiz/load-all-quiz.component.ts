@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute } from '@angular/router';
 import { QuizService } from 'src/app/Services/quiz.service';
 
@@ -9,10 +10,12 @@ import { QuizService } from 'src/app/Services/quiz.service';
 })
 export class LoadAllQuizComponent implements OnInit {
   cid: any;
-  quizzes: any;
+  quizzes: any = [];
+ 
   constructor(
     private route: ActivatedRoute,
-    private quizService: QuizService
+    private quizService: QuizService,
+    private snacbar : MatSnackBar
   ) {}
 
   ngOnInit(): void {
@@ -31,8 +34,21 @@ export class LoadAllQuizComponent implements OnInit {
         );
       } else {
         this.quizService.getActiveQuizzesOfCategory(this.cid).subscribe((data) => {
+      
           this.quizzes = data;
-        });
+          if(this.quizzes.length==0){
+            this.snacbar.open("No Quizzes are available for this category !!","",{
+              duration:3000,
+            });
+          }
+          console.log(this.quizzes);
+
+        },
+        (error) => {
+        console.log(error);
+        this.snacbar.open("Something went Wrong .... ", error.error,{
+          duration: 3000});
+      });
       }
     });
   }

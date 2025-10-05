@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import baseUrl from './urlFile';
-
+import { environment } from 'src/environments/environment.development';
+const baseUrl = environment.apiUrl;
 @Injectable({
   providedIn: 'root'
 })
@@ -35,6 +35,6 @@ export class QuizService {
   }
 
   public getActiveQuizzesOfCategory(cid: any) {
-    return this.http.get(`${baseUrl}category/active/${cid}`);
+    return this.http.get(`${baseUrl}/category/active/${cid}`);
   }
 }

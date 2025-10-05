@@ -1,10 +1,10 @@
 import { Category } from './category';
 export class Quiz {
-  qid:any;
+  id:any;
   title: any;
   description: any;
   maxMarks: any;
-  numberOfQuestions: any;
+  noOfQuestion: any;
   active: any;
   category: Category = new Category();
 }

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import baseUrl from './urlFile';
-// const baseUrl = 'http://localhost:8080/question';
+import { environment } from 'src/environments/environment.development';
+const baseUrl = environment.apiUrl;
 @Injectable({
   providedIn: 'root',
 })

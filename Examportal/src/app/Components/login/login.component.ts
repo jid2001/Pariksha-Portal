@@ -62,7 +62,8 @@ loginCredentials = {
 
             //redirect ..NOrmal : user dashboard
 
-            window.location.href = '/user-dashboard';
+            // window.location.href = '/user-dashboard';
+              this.router.navigate(['user-dashboard']);
             }
             else{
               // window.location.reload();
