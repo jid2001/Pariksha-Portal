@@ -1,6 +1,7 @@
 steps:
   # 1) Build the Angular app using Node 16
   - name: 'node:16'
+    dir: 'Examportal'
     entrypoint: 'bash'
     args:
       - '-c'
@@ -12,6 +13,7 @@ steps:
 
   # 2) Build a Docker image and tag it for Artifact Registry
   - name: 'gcr.io/cloud-builders/docker'
+    dir: 'Examportal'
     args:
       - 'build'
       - '-t'
