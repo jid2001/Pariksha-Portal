@@ -1,0 +1,50 @@
+steps:
+  # 1) Build the Angular app using Node 16
+  - name: 'node:16'
+    entrypoint: 'bash'
+    args:
+      - '-c'
+      - |
+        set -e
+        echo "Using Node $(node --version)"
+        npm ci
+        npm run build -- --configuration production
+
+  # 2) Build a Docker image and tag it for Artifact Registry
+  - name: 'gcr.io/cloud-builders/docker'
+    args:
+      - 'build'
+      - '-t'
+      - 'gcr.io/${PROJECT_ID}/${_IMAGE}:$COMMIT_SHA'
+      - '.'
+
+  # 3) Push the Docker image to Artifact Registry
+  - name: 'gcr.io/cloud-builders/docker'
+    args:
+      - 'push'
+      - 'gcr.io/${PROJECT_ID}/${_IMAGE}:$COMMIT_SHA'
+
+  # 4) Deploy the pushed image to Cloud Run
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    entrypoint: 'bash'
+    args:
+      - '-c'
+      - |
+        set -e
+        gcloud run deploy ${_SERVICE_NAME} \
+          --image gcr.io/${PROJECT_ID}/${_IMAGE}:$COMMIT_SHA \
+          --region ${_REGION} \
+          --platform managed \
+          --allow-unauthenticated \
+          --project ${PROJECT_ID}
+
+images:
+  - 'gcr.io/${PROJECT_ID}/${_IMAGE}:$COMMIT_SHA'
+
+substitutions:
+  _REGION: 'asia-south1'
+  _REPOSITORY: 'exam-portal-repo'
+  _IMAGE: 'app-examportal-frontend'
+  _SERVICE_NAME: 'app-examportal-frontend'
+
+timeout: '1200s'
