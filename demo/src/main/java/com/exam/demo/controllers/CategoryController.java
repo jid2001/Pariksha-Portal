@@ -1,7 +1,11 @@
 package com.exam.demo.controllers;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
+import com.exam.demo.models.QuizCategory.Quiz;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -52,6 +56,16 @@ public class CategoryController {
 		return this.categoryService.getCategoryById(id);
 		
 	}
+
+    @GetMapping("/active/{id}")
+    public ResponseEntity<?> getActiveQuizes(@PathVariable("id") long id){
+        Category category = this.categoryService.getCategoryById(id);
+
+        Set<Quiz> allQuiz = category.getQuizzes();
+        List<Quiz> activeQuizList =   allQuiz.stream().filter(Quiz::isActive).toList();
+
+        return ResponseEntity.ok(activeQuizList);
+    }
 	
 	// delete category 
 	
