@@ -48,16 +48,26 @@ const routes: Routes = [
         path: 'update-quiz/:qid', component: UpdateQuizComponent
       },
       {
+        // support query param navigation: /admin-dashboard/view-questions?qid=...&title=...
+        path: 'view-questions', component: ViewQuestionsComponent
+      },
+      {
+        // also support legacy/path params: /admin-dashboard/view-questions/:id/:title
         path: 'view-questions/:id/:title', component: ViewQuestionsComponent
       }
     ]
   },
   {
-    path: 'user-dashboard', component: UserDashboardComponent, pathMatch: 'full', canActivate: [UserGuard],
+    path: 'user-dashboard', component: UserDashboardComponent, canActivate: [UserGuard],
     children: [
       {
+        path: 'all',
+        component: LoadAllQuizComponent,
+      },
+      {
+        // category id route - will be available as params['cid'] in the component
         path: ':cid',
-        component: LoadAllQuizComponent, //cid=categoryId
+        component: LoadAllQuizComponent, // cid = categoryId
       },
       {
         path: 'instructions/:qid',

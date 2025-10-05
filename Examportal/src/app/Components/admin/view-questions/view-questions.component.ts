@@ -25,11 +25,11 @@ export class ViewQuestionsComponent implements OnInit {
     this.reloadData();
   }
   reloadData() {
-    this.qid =1;
-    this.qtitle = "C++ mcq test";
+    // this.qid =1;
+    // this.qtitle = "C++ mcq test";
     // this.id = this._route.snapshot.params['qid'];
     this.qid = this.route.snapshot.params['qid'];
-    this.qtitle = this.route.snapshot.params['qtitle'];
+    this.qtitle = this.route.snapshot.params['title'];
     console.log(this.qtitle);
     console.log(this.qid);
     this.questionService.getQuestionsOfQuiz(this.qid).subscribe(

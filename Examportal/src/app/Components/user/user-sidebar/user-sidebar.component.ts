@@ -16,8 +16,12 @@ export class UserSidebarComponent implements OnInit {
   constructor(private categoryService: CategoryService) {}
 
   ngOnInit(): void {
-    this.categoryService.getCategories().subscribe((data) => {
+    this.categoryService.getCategory().subscribe((data) => {
+      console.log(data);
       this.categories = data;
+    },
+    (error) =>{
+        console.log(error);
     });
   }
 

@@ -37,7 +37,7 @@ export class SignupComponent implements OnInit {
       },
       (error) => {
         console.log(error);
-        this.snacbar.open("Something went wrong", "Okay!",{
+        this.snacbar.open("Something went wrong", error.error,{
           duration: 3000});
       });
 

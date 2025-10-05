@@ -1,4 +1,4 @@
-<div class="container-fluid dashboard" *ngIf="!isSubmit">
+<div class="container-fluid dashboard" *ngIf="!submitted">
     <div class="row">
       <div class="col-lg-2 col-sm-12 mt-5">
         <mat-card>
@@ -11,9 +11,9 @@
         </mat-card>
       </div>
       <div class="col-lg-8 col-sm-12 mt-1">
-        <h1 class="title">{{ questions[0].quiz.title }} Quiz</h1>
-        <mat-card *ngFor="let ques of questions; let i = index" class="mb-2">
-          <mat-card-content>
+  <h1 class="title">{{ quizQuestions[0]?.quiz?.title || 'Quiz' }} Quiz</h1>
+  <mat-card *ngFor="let ques of quizQuestions; let i = index" class="mb-2">
+            <mat-card-content>
             <p>
               <b>{{ i + 1 }}) </b>
               <span class="d-inline-block" [innerHTML]="ques.content"></span>
@@ -77,7 +77,7 @@
           mat-raised-button
           color="primary"
           class="my-3 full-width"
-          (click)="submitQuiz()"
+          (click)="confirmSubmit()"
         >
           Submit
         </button>
@@ -90,12 +90,12 @@
             finished</mat-card-subtitle
           >
   
-          <mat-card-content>
+            <mat-card-content>
             <h1>{{ getFormattedTime() }}</h1>
             <mat-spinner
               class="mx-auto"
               mode="determinate"
-              [value]="(value / 300) * 100"
+              [value]="(remainingSeconds / totalDurationSeconds) * 100"
             >
             </mat-spinner>
           </mat-card-content>
@@ -104,23 +104,23 @@
     </div>
   </div>
   
-  <div class="container text-center mt-4" *ngIf="isSubmit">
+  <div class="container text-center mt-4" *ngIf="submitted">
     <div class="row">
       <div class="col-md-6 offset-md-3">
         <mat-card>
           <div class="mat-headline">Quiz Result</div>
   
           <mat-card-content class="mt-4">
-            <h2>You got {{ marksGot }} marks</h2>
-            <h2>Correct answers :{{ correctAnswer }}</h2>
-            <h2>Total marks {{ maximumMarks }}</h2>
-            <h2>You attempted {{ attempted }} questions</h2>
+            <h2>You got {{ score }} marks</h2>
+            <h2>Correct answers : {{ correctCount }}</h2>
+            <h2>Total marks : {{ maxMarks }}</h2>
+            <h2>You attempted {{ attemptedCount }} questions</h2>
           </mat-card-content>
           <div class="container mt-3">
-            <button mat-raised-button color="primary" (click)="print()">
+            <button mat-raised-button color="primary" (click)="printResult()">
               Print
             </button>
-            <button mat-raised-button color="warn" [routerLink]="'/user/all'">
+            <button mat-raised-button color="warn" [routerLink]="'/user-dashboard'">
               Home
             </button>
           </div>

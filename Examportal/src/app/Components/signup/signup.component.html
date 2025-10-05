@@ -11,23 +11,9 @@
         <h2 class="text-center">Register Here !!</h2>
         <!-- {{ user | json }} -->
         <form (ngSubmit) = "formSubmit()">
-        <!-- Usename -->
 
-        <mat-form-field class="full-width" appearance="outline">
-          <mat-label>Username</mat-label>
-          <input [(ngModel)]="user.username" name="username"
-                matInput placeholder="Username" 
-                />
-                <!-- <mat-hint>Username must be unique</mat-hint> -->
-        </mat-form-field>
-        <!-- Password -->
-        <mat-form-field class="full-width" appearance="outline">
-          <mat-label>Password</mat-label>
-          <input [(ngModel)]="user.password" name="password"
-          type="password" matInput placeholder="Password" />
-        </mat-form-field>
 
-        <!-- FirstName -->
+           <!-- FirstName -->
         <mat-form-field class="full-width" appearance="outline">
           <mat-label>First Name</mat-label>
           <input [(ngModel)]="user.firstName" name="firstName" 
@@ -47,6 +33,24 @@
           <input [(ngModel)]="user.emailId" name="emailId"
            matInput placeholder="Enter Your Email Id" />
         </mat-form-field>
+        
+        <!-- Usename -->
+
+        <mat-form-field class="full-width" appearance="outline">
+          <mat-label>Username</mat-label>
+          <input [(ngModel)]="user.username" name="username"
+                matInput placeholder="Username" 
+                />
+                <!-- <mat-hint>Username must be unique</mat-hint> -->
+        </mat-form-field>
+        <!-- Password -->
+        <mat-form-field class="full-width" appearance="outline">
+          <mat-label>Password</mat-label>
+          <input [(ngModel)]="user.password" name="password"
+          type="password" matInput placeholder="Password" />
+        </mat-form-field>
+
+      
 
         <!-- Buttons -->
 

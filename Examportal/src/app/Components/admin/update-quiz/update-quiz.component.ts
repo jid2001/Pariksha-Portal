@@ -15,6 +15,8 @@ export class UpdateQuizComponent implements OnInit {
   id = 0;
   quiz: any;
   categories: any;
+  loadAddQuestion: boolean = false;
+  
 
   constructor(
     private quizService: QuizService,
@@ -48,7 +50,7 @@ export class UpdateQuizComponent implements OnInit {
     );
 
 
-    throw new Error('Method not implemented.');
+    // initialization complete
   }
 
   updateQuiz() {
@@ -77,6 +79,20 @@ export class UpdateQuizComponent implements OnInit {
         });
       }
     );
+  }
+
+  cancel() {
+    // navigate back to quizzes list
+    this.router.navigate(['/admin-dashboard/quizzes']);
+  }
+
+  addQuestion(){
+    this.loadAddQuestion = true;
+  }
+
+  toggleAddQuestion(event:boolean){
+    console.debug('toggleAddQuestion event received:', event);
+    this.loadAddQuestion = event;
   }
 
 }

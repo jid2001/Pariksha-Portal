@@ -2,18 +2,11 @@
     <div class="mat-headline text-center">Questions of {{ qtitle }}</div>
     <div class="row">
       <div class="col-lg-8 offset-lg-2">
-        <button
-          mat-raised-button
-          color="warn"
-          class="mb-2"
-          [routerLink]="'/admin/add-question/' + qid + '/' + qtitle"
-        >
-          <mat-icon>add</mat-icon> Add Question
-        </button>
+        
   
         <mat-card *ngFor="let ques of question; let i = index" class="mb-2">
           <p>
-            <b>{{ i + 1 }}) </b>
+            <b>{{ i + 1 }})</b>
             <span class="d-inline-block" [innerHTML]="ques.content"></span>
           </p>
   

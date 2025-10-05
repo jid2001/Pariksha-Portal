@@ -1,0 +1,55 @@
+/* Styles for Update Quiz component */
+.update-quiz-wrap {
+  display: flex;
+  justify-content: center;
+  padding: 24px;
+}
+
+.update-card {
+  width: 100%;
+  max-width: 900px;
+}
+
+.full-width {
+  width: 100%;
+}
+
+.form-row {
+  display: flex;
+  gap: 16px;
+}
+
+.form-row .col {
+  flex: 1 1 0;
+}
+
+.row-inline {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-top: 12px;
+}
+
+.spacer {
+  flex: 1 1 auto;
+}
+
+.category-select {
+  min-width: 220px;
+}
+
+.actions {
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
+  margin-top: 18px;
+}
+
+.debug {
+  background: #f6f8fa;
+  padding: 12px;
+  border-radius: 6px;
+  font-size: 12px;
+  max-height: 160px;
+  overflow: auto;
+}

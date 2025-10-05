@@ -83,6 +83,12 @@ export class ViewQuizzesComponent implements OnInit {
 
   viewQuestion(qid: any, title:string) {
     console.log(qid, title);
-    this.router.navigate(['/admin-dashboard/view-questions/',{qid,title}]);
+    // Navigate to view-questions and pass qid/title as query parameters
+    // this.router.navigate(['/admin-dashboard/view-questions'], {
+    //   queryParams: { qid: qid, title: title }
+    // });
+
+
+    this.router.navigate(['/admin-dashboard/view-questions/',{qid,title}]); 
   }
 }
